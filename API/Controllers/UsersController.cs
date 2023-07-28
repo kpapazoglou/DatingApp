@@ -1,15 +1,19 @@
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers
 {
-    [ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]  // GET /api/users
 
-    public class UsersController
+    [Authorize] //[AllowAnonymous] bypasses authorization statements. If you combine [AllowAnonymous] and an [Authorize] attribute, the [Authorize] attributes are ignored. For example if you apply [AllowAnonymous] at the controller level:
+                    //Any authorization requirements from [Authorize] attributes on the same controller or action methods on the controller are ignored.
+                    //Authentication middleware is not short-circuited but doesn't need to succeed.
+    public class UsersController :BaseApiController
     {
+      
+
 
         private readonly DataContext _context;
 
@@ -19,6 +23,7 @@ namespace API.Controllers
 
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
@@ -27,6 +32,9 @@ namespace API.Controllers
 
             return users;
         }
+
+
+    
         [HttpGet("{id}")]
         public async Task<ActionResult<AppUser>> GetUser(int id)
         {
