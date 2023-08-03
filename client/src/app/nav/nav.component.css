@@ -1,0 +1,3 @@
+.dropdown-toggle, .dropdown-item{ /*dropdown class kai dropdown-item class          */ 
+    cursor: pointer;/*makes the arrow a pointer xeraki       */
+}

@@ -1,0 +1,21 @@
+<div class="container mt-5">
+    <div *ngIf="!registerMode" style="text-align: center;">
+        <h1>Find your match</h1>
+        <p class="lead">Come on in to view your matches .. all you need to do is sign up!</p>
+        <div class="text-center">
+            <button (click)="registerToggle()" class="btn btn-primary btn-lg me-2">Register</button>
+            <button class="btn btn-primary btn-info btn-lg ">Learn more</button>
+        </div>
+    </div>
+
+    <div *ngIf="registerMode" class="container">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <app-register (cancelRegister)="cancelRegisterMode($event)" ></app-register> <!-- parent to child cm , get the users fom register component we use [], 
+                    from child to parent outputing stuff we use ()
+                the child app-register outputs the method cancelRegister() and calss the cancelRegisterMode() from father component and 
+                parse the event , the logic -->
+            </div>
+        </div>
+    </div>
+</div>
