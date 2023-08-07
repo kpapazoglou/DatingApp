@@ -1,24 +1,27 @@
-<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+<nav class="navbar navbar-expand-md navbar-dark fixed-top bg-primary">
     <div class="container">
-      <a class="navbar-brand" href="#">Dating App</a> <!-- title  -->
+      <a class="navbar-brand" routerLink="/" routerLinkActive="active">Dating App</a> <!-- title  -->
       
       
-        <ul class="navbar-nav me-auto mb-2 mb-md-0" *ngIf="accountService.currentUser$ | async"><!-- ngif' its a stractual directive ,always begin with 
-          * '*ngIf="currentUser$"...> if this has sopmething that is not null then we know we are logged in -->
-          <li class="nav-item">
-            <a class="nav-link "  href="#">Matches</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">List</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link ">Messages</a>
-          </li>
+        <ul class="navbar-nav me-auto mb-2 mb-md-0" ><!-- ngif' its a stractual directive ,always begin with*, *ngIf="accountService.currentUser$ | async"
+           '*ngIf="currentUser$"...> if this has sopmething that is not null then we know we are logged in -->
+            <ng-container *ngIf="accountService.currentUser$ | async"><!--works as  ""empty tag""  .meaning this ng-container is not visible to dom!! -->
+              <li class="nav-item">
+                  <a class="nav-link " routerLink="/members" routerLinkActive="active">Matches</a><!-- routerLinkActive="active" bootstrap class-->
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" routerLink="/lists" routerLinkActive="active">List</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" routerLink="/messages" routerLinkActive="active">Messages</a>
+               </li>
+                  
+            </ng-container>
         </ul>
 
-        <div class="drobdown" *ngIf="accountService.currentUser$ | async" dropdown>  <!-- type div.dropdwon to create a div class faster -->
-          <a  class="dropdown-toggle text-light text-decoration-none" dropdownToggle>Welcome user</a>   <!--a.dropdown-toggle.text-light --> 
-          <div class="dropdown-menu mt-3 " *dropdownMenu>  <!--dispalay the menu whe the buuton is clicked -->
+        <div class="drobdown"*ngIf="(accountService.currentUser$ | async) as user" dropdown>  <!-- type div.dropdwon to create a div class faster -->
+          <a  class="dropdown-toggle text-light text-decoration-none" dropdownToggle>Welcome {{user.username | titlecase}}</a>   <!--a.dropdown-toggle.text-light ,,,, titlecase->set fisr letter to capital--> 
+          <div class="dropdown-menu mt-3" *dropdownMenu>  <!--dispalay the menu whe the buuton is clicked -->
             <a  class="dropdown-item">Edit Profile</a>
             <a  class="dropdown-item" (click)="logout()">Logout</a>
           </div>
@@ -38,7 +41,7 @@
                 class="form-control me-2" 
                 type="password" 
                 placeholder="Password" >
-          <button class="btn btn-outline-success" type="submit">Login</button>
+          <button class="btn btn-success" type="submit">Login</button>
         </form>
       </div>
   </nav>

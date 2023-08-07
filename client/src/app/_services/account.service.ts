@@ -36,7 +36,7 @@ export class AccountService { //is responsible to make our http request from cli
 
   register(model: any)
   {
-    return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
+    return this.http.post<User>(this.baseUrl + 'account/register', model).pipe( // pipe ---> we can trasnform the data we get back inside an observalbe
       map(user => {
         if (user) {
           localStorage.setItem('user', JSON.stringify(user))//strinfy object -> to change the value to string,storage needs only string
