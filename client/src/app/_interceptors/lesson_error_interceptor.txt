@@ -1,0 +1,391 @@
+So in this lesson, we're going to look at a rather nifty feature that's provided by the Angular HTTP
+
+client, which allows us to intercept HTTP requests when they either go out to our API or when they
+
+come back from our API and we're interested in what our API is returning so that we can intercept these
+
+HTTP errors.
+
+And depending on the type of error, we can handle it and spit out the appropriate response.
+
+What do we want to show to the client?
+
+And in the case of an unauthorized, then instead of handling it silently, we'd like to display a toast,
+
+for example, telling the user that they're unauthorized for what they've attempted to do.
+
+So we'll head back to the code and clean things up at the top, and we'll open up the terminal once
+
+again.
+
+And we're going to take a look at Kng dash, dash, help and see what template we have available for
+
+interceptors.
+
+And we do we have an interceptor template.
+
+It doesn't have an alias.
+
+So we have to actually type out the full word of interceptor to use lists and let's give this a go.
+
+So I'm just going to clear the window again and I'm going to say Kng intercept interceptor.
+
+And this is going to go in its own folder with underscore interceptors.
+
+We will have more than one of these.
+
+And this one we're going to call error and we're going to skip dash tests and we'll give it a dry run
+
+just to see what this is going to create and press return.
+
+And finally, it creates a single file in the interceptors folder.
+
+And that looks good to me.
+
+So I'm just going to remove the driver in and execute that request.
+
+Or lack command.
+
+So let's see what this has given us.
+
+So we'll open up the file Explorer, go into our clients, into source app and then interceptors and
+
+take a look at our error interceptor.
+
+So once again, this uses the injectable decorator, even though we're not going to actually inject
+
+this into anything.
+
+And this implements the HTTP interceptor interface and it intercepts and handles an HTTP request or
+
+HTTP response.
+
+Sounds good.
+
+And exactly what we're looking for.
+
+So inside here, we're going to inject a couple of things.
+
+We're going to inject the router, so we're going to say private router and router so that we can redirect
+
+the user if we need to, depending on the error that we get back from the API, we'll also injects the
+
+toaster so that we can.
+
+And a notification for anything naughty that the user has done that we need to tell them they've done
+
+wrong.
+
+And then we've got our intercept method, so we've got our HTTP requests.
+
+That's called request in this case.
+
+And we've got what happens next from the HTTP handler.
+
+And in this case we're going to say return next handle request.
+
+And we know that our needs to be client returns, observables and in order to transform or modify an
+
+observable, then we use the pipe method from our edges.
+
+So we'll open parentheses.
+
+And we effectively want to catch any errors inside this interceptor.
+
+So we're going to use the catch error that we get from our eyes, and then we'll get access to the error.
+
+And let the arrow function open, curly brackets.
+
+And then first of all, we'll check to make sure that we do have an error we should do if we're in the
+
+catch error, but just so that we don't get any compiler complaints, we'll double check just to make
+
+sure that we have this error.
+
+And then we're going to switch based on the status code of the error.
+
+So we're going to use a switch statement.
+
+And we're going to check the error status and we don't get any compiler help here.
+
+So it doesn't obviously, it doesn't know what thing this error is actually a type of.
+
+And we can see that this is going to be.
+
+Error any.
+
+So we're going to need to give this a hint about what we're getting back here.
+
+And what this is going to return is an HTTP error response.
+
+And this should give us a bit of type help.
+
+And sure enough, now when we add the period, we can see the different options we have inside an HTTP
+
+error response.
+
+So I'm going to check for the error status and this is what we're going to switch on.
+
+And to use a switch statement, we specify the different cases.
+
+So I'm going to say case 400 as the first option and add a colon.
+
+And this one's the special one really, because we can have two different types of errors coming back
+
+from our API for a 400 bad request.
+
+One of them is the simple bad request that we added manually, and the other one is a validation error,
+
+and that's also a 400 error response.
+
+But we know from when we looked at the client chrome devtools that.
+
+If it's a validation error response actually comes inside an object called error, and then the actual
+
+errors are inside another object called errors.
+
+So this is going to look a little bit weird, but we're going to go through with it anyway.
+
+The first part is the hasty error response, which we've called error.
+
+So that's a word we're going to see a lot inside here.
+
+So we're going to say if error as in.
+
+We already know that part.
+
+But then we're going to check for the error objects and then we're going to check for errors because
+
+that is what is coming back or that's what our API server is sending back to us.
+
+So that's what we need to access.
+
+Now we know that's an array, but it's also an array of objects.
+
+So we also need to go a bit further inside here.
+
+So we'll add a variable to store this stuff in and we'll say model const model state errors.
+
+And or set this to be an empty array.
+
+Then we'll loop over the different errors in sides that errors.
+
+Objects.
+
+And because those are objects, we need to use a special kind of loop and we're going to say for contact
+
+key in error dot.
+
+Error dot errors.
+
+I appreciate the overuse of the word error here, but please bear with me and we need to check to see
+
+if the error, the error errors, and then we need to access the key to make sure that exists.
+
+And if we do have it, we can say model states errors push.
+
+And then we're going to say error.
+
+Error.
+
+Errors.
+
+And push that key.
+
+Into that array.
+
+So this is going to build up an array of errors that we get for validation errors and store it in this
+
+variable and below the for statement after we've done that work.
+
+So below the four statements.
+
+We're going to throw the model state errors.
+
+Because we want our component to actually deal with these kind of errors.
+
+What we're doing here is formatting them into an array, so it's easier for our component to handle
+
+the error and to display something to the user to let them know they've done something wrong.
+
+Now we also need to handle the other case.
+
+So if we do not have the errors, errors, errors, objects, then we know it's a normal bound request.
+
+So we can specify else.
+
+Open curly brackets.
+
+And for this one, we're just going to use a toast.
+
+And we're going to specify error.
+
+And then we're going to say error, dot error.
+
+And the error status and the status gives us the error code, the HTTP response error code.
+
+So that was the tricky one and the rest of them are easier.
+
+So below the case for four hundredths.
+
+Will add a case.
+
+For the for one and for this one.
+
+We're just going to say this dot toaster, dot error.
+
+And we're going to specify unauthorized.
+
+As the message.
+
+And once again, we'll use Eric's status.
+
+And I'm getting an error here because argument of type number is not assignable to parameter of type
+
+string.
+
+So I guess I can just say to string here.
+
+To get rid of that particular warning.
+
+It's still going to output 41 or 400 in this case.
+
+And I guess I'm going to need to do the same thing here as well and following this so that we don't
+
+continue execution of this switch statement, we need to add break inside that playlist will add the
+
+case for the for a for type of error.
+
+And we're going to want to redirect the user to a different location and we're going to create a not
+
+found component soon.
+
+We don't have it yet, but we will do.
+
+And we're going to say return navigate by URL and we're going to open quotes, say forward slash nots
+
+dash found so that we redirect them to a not found page and we're going to break again.
+
+And in the case of a 500, we'll do something slightly different with this as well because we want access
+
+to the error response in a component that we're going to create so that we can display the information
+
+from the error on that page and a tool that we can use to do this.
+
+We can say const navigation.
+
+Extras will call us.
+
+And this is going to be a type of navigation.
+
+Extras.
+
+And we kind of set this equal to the error response.
+
+Now we're using this because our router is capable of receiving states, and the states that we want
+
+it to receive is the API exception that we're returning from our server.
+
+So we'll open curly brackets, we specify state.
+
+And then inside here we can specify the error.
+
+And this is going to be set to error, dot error.
+
+And that's the part that contains our exception.
+
+After that, we're going to say this dot, Rita.
+
+And we're going to say navigate by URL.
+
+And we're going to pass them to a component that we've yet to create called server dash error.
+
+And then we can pass through our navigation extras that we just created.
+
+So we'll pass through the navigation extras as a second argument here.
+
+And once again, we'll break.
+
+So that takes care of all of the errors that we have.
+
+But just in case we've missed something, we'll add a default case and we'll say this dot toaster error
+
+and we'll just specify something unexpected.
+
+Went wrong.
+
+And because we don't know what it is, we're going to log this out to the console as well so we can
+
+take a closer look and we'll break from this as well.
+
+Following this, the big old switch statement we've just created so that we don't have this error at
+
+the top.
+
+We do need to throw the error at the end as well.
+
+And so below the sweet statement and below the if statement.
+
+So this line here, we're just going to say throw error.
+
+And that should mean that we no longer have any errors.
+
+But we've got a warning here.
+
+And that's because I've forgotten to add the break statement.
+
+And if we look at this, it says full through case in Switch.
+
+And that means if we do get this particular error, it's still going to fall through to the next ones
+
+unless we add the brake statement there.
+
+So now it's clean, everything's good, and we have our error interceptor, but we're not finished yet
+
+because we need to tell our module about this interceptor and we need to go to the app module.
+
+And inside our providers array.
+
+We need to provide the interceptor that we've created.
+
+So we're going to say provide.
+
+And we're going to specify htp interceptors, which we get from Angular common HTTP.
+
+We're going to tell it about the class that we've created, which is the error interceptor.
+
+And we want to specify Malte is true because Angela comes with its own interceptors as well and we do
+
+not want to replace them.
+
+We want to add our own interceptor to the existing interceptors.
+
+Now with this in place, we should be able to test some of our functionality inside the client and we'd
+
+expect to see full of 400 error.
+
+We're going to get a toast saying 400.
+
+This was not a good request.
+
+Full of fury.
+
+One error we want to see for one unauthorized for the 400 validation error.
+
+Well, we're not going to see much at the moment because all we've got is the information in our console
+
+and we can see the two arrays that we have that we can use to work with inside our component when we
+
+use it.
+
+And if we take a look at the 500 error, well, we don't have a page to go to for this one.
+
+And if we go back to errors, that's going to be the same thing for the 404 as well.
+
+Right now it's just going to redirect us to the home page.
+
+So that was a bit of work, but we've saved ourselves some time for later because now we've centralized
+
+our error handling for any of the HDB error responses.
+
+Next, we'll take a look at how we deal with validation errors and how we can use them in our components.

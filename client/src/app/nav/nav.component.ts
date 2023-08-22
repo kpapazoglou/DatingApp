@@ -27,7 +27,7 @@ export class NavComponent implements OnInit {
     this.accountService.login(this.model).subscribe({
       next: _ => // "_ " ---> we are not using an argument for this particular method
         this.router.navigateByUrl('/members'),
-        error: error => this.toastr.error(error.error)
+       // error: error => this.toastr.error(error.error) //,,,the toastr message  is handled inside intercepto
       })
   
   }

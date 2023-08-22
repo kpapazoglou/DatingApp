@@ -1,0 +1,287 @@
+Okay, last part in this section, and that's just to deal with this server error page.
+
+And what do we want to notify to the user if something's gone wrong?
+
+Now, please remember this is a training course.
+
+So what we're going to create now is not something you would do on a typical production app.
+
+But whilst we're learning how to code, it's important that we get as much information about problems
+
+as possible.
+
+And one way to do that is simply to display the error inside this component template so we can easily
+
+see what's going on inside the browser if and when something does go wrong.
+
+So we'll go back to VS code and we're going to start work in our server error components.
+
+We're going to open up the server error component itself.
+
+And also just as a reminder, we'll go to our error interceptor and take a look at what we're doing
+
+for this 500 type response.
+
+So we're going to get the error and store it in the router state.
+
+And when we navigate to the server error, then we're going to have access to the error inside this
+
+thing called navigation extras.
+
+And we're going to use that information to display on our components template.
+
+So let's see how we use that.
+
+And because we want to get access to the router state, we need to inject the router into this component.
+
+So we'll inject a router.
+
+And we only get one chance, by the way, to look at what's inside this root estate.
+
+And that's very specifically inside the constructor.
+
+The NG on init.
+
+On this occasion is too late.
+
+It's already gone by this point we can only access it once inside the constructor.
+
+So we'll open up the curly brackets for this and we'll say const navigation.
+
+Equals list dot router and we can say get current navigation.
+
+Then we can say this dot error and in fact we'll create a property called error and we'll just give
+
+it a type of any and we'll say list dot error equals navigation.
+
+And all of this could potentially be undefined.
+
+So we need to use optional chaining for each part of this and we're going to say navigation question
+
+mark.
+
+And we're going to go for the extras question mark.
+
+And then inside here, we're going to look for the state's question mark, followed by a period.
+
+And then specifically, we need to access what we've called lists inside the states.
+
+And if we go back to our interceptor, then the name of the thing that we're trying to access is called,
+
+not surprisingly, because I've used this word so many times, error.
+
+And that's what we're going to try and access.
+
+So we do this inside square brackets to access this part and we'll specify error.
+
+So what we should have inside there in the event that we have an internal server error inside here,
+
+should be the API exception that we returned from the API.
+
+So we'll open up the components template.
+
+So, so we'll look for server error component HTML and inside here we're going to add some helper text
+
+that's going to help us understand what's happening when we run into this kind of problem.
+
+So we'll add an H and just say internal server error and we'll just add a hint.
+
+And this is for ourselves, by the way, and we'll say refreshing.
+
+The page will make the error disappear because if you do refresh the page, then you're no longer being
+
+redirected to this component via the Http interceptor and the navigation extras will be gone.
+
+We won't have access to them, we only get access to them when we're being redirected.
+
+And at that point we're passing the error to the navigation extras.
+
+So only initially we'll have will we have access to that information.
+
+Okay, then we'll use the NG container once again.
+
+And close that off and we'll use the conditional NDF to make sure that we do have an error before we
+
+go forwards.
+
+Because if someone is refreshing the page, then that error object will be empty.
+
+Then we'll add an H five and give it a class of text danger.
+
+And in here we're going to display the contents of the error message.
+
+So we're going to say error message.
+
+And we've used the error type here so we don't have type safety and we need to rely on our ability to
+
+type something without making typos because we're not going to get any compiler assistance here if we
+
+do make a typo like I've just demonstrated.
+
+So do be careful, especially when using the any type to be careful with typos and then we'll add a
+
+paragraph tag and we'll give it a class equal to font weight.
+
+Bold.
+
+And this is another hint for ourselves.
+
+And if you are seeing this.
+
+Then Angular is probably.
+
+Not to blame A 500 type error is a server error.
+
+And when we're talking about our server, in this case, we're talking about our.
+
+Net API server.
+
+So if you're trying to if you see this and then you start messing around with the angular code, then
+
+you're probably not going to fix anything because it's probably got nothing to do with Angular.
+
+Then we'll add an ordered list.
+
+And in fact, before then, we'll just add a paragraph and say what to do Next question, Mark.
+
+And here's a couple of things that you can try if you do encounter this.
+
+So we'll add a list item and say open chrome dev tools, exclamation mark, because that's super important,
+
+then check.
+
+The failing.
+
+Request.
+
+In the network tab.
+
+So in chrome dev tools of course we have access to.
+
+Things.
+
+And one of those things is the network tab.
+
+If we've got a failing request, then it's going to be a request coming or going to our API.
+
+It will be in red.
+
+We can click on it and then we can check the request for accuracy.
+
+Is the is it the correct URL?
+
+Is it going to the correct end?
+
+What is the response?
+
+What is the error?
+
+All that kind of stuff.
+
+So that's the first thing to do.
+
+And as I mentioned, you want to examine the request.
+
+Earl.
+
+What's API endpoints are you requesting?
+
+And more importantly, is it accurate?
+
+And thirdly, because we do want to confirm that it is the API that's the problem.
+
+One of the easiest ways to do that is to rule out Angular completely.
+
+And we want to go ahead and try and reproduce the problem.
+
+In Postman.
+
+And if you can reproduce the problem in Postman, that guarantees that any attempt to fix the problem
+
+in Angular will be a complete waste of time because Angular is not the problem.
+
+So I'll say if we get same error.
+
+Angela is 100% not the problem.
+
+And any attempt to fix it in Angola is just a waste of your time.
+
+Okay.
+
+Below this, just further assistance that we'll give ourselves, we'll add a paragraph.
+
+And we'll give it some style and just say font weights and we'll set this to bold.
+
+And so following is the stack trace.
+
+The scary looking stack trace, but really you're only interested in the first few lines as label will
+
+tell you which.
+
+Line of code caused the issue in the API.
+
+And following this we'll just add another HTML tag called code.
+
+This time we'll give it a class equal to empty five and we'll give it some style and just say background
+
+color.
+
+And we'll just use white smoke.
+
+And inside here we can specify.
+
+The.
+
+Error detail with an S.
+
+That's how we specified it in the API.
+
+Okay.
+
+Obviously this is for us not end users, but let's go test and make sure things are happening as we
+
+expect.
+
+So we'll get two errors.
+
+We'll click the 500 error and then we get the stuff that we just output there.
+
+We know our error when we click on an error is the object reference not set to an instance of object.
+
+We get our instructions what to do next.
+
+Open chrome dev tools examine the request URL, reproduce the problem in postman and if we get the same
+
+error, angular is 100% not a problem.
+
+And then of course we get our stack trace and it's kind of nicely formatted because of those new line
+
+breaks that were provided by the API and we can see line 38 in the buggy controller caused this problem.
+
+So at that stage we'd go and investigate what the problem is.
+
+Now we don't need to investigate because that's a problem that we purposely created so that we can test
+
+our error handling ability.
+
+So that's all good.
+
+And if I refresh the page, the error will definitely disappear because we're no longer routing to this
+
+component and therefore we will not have access to navigation extras.
+
+So the error does disappear.
+
+Obviously we can get it back by reproducing the error.
+
+So that brings us to the end of our error handling section in this course.
+
+And we'll head over to VS code once again and we're going to commit and stage our changes.
+
+So we'll click on the version tab and we're going to stage our changes.
+
+And for the message, we're going to say end of Section seven in this case, and we're going to commit
+
+and sync those changes on up to GitHub.
+
+And we'll wrap up this section with a summary.
